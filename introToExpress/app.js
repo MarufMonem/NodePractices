@@ -15,6 +15,11 @@ app.get("/cat", function(req,res){
     res.send("MEOW");
 });
 
+app.get("*",function(req,res){
+    res.send("You are a star");
+});
+
+
 app.listen(5500,"127.0.0.1",function(){
     console.log("Started");
 });

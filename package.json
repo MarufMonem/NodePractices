@@ -2,7 +2,7 @@
   "name": "node-projects",
   "version": "1.0.0",
   "description": "Contains node projects",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
     "cat-me": "^1.0.3",
     "express": "^4.17.1",
     "faker": "^4.1.0",
-    "knock-knock-jokes": "^1.7.0"
+    "knock-knock-jokes": "^1.7.0",
+    "request": "^2.88.2"
   }
 }
