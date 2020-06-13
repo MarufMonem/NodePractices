@@ -1,8 +1,32 @@
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
+var express         = require("express");
+var app             = express();
+var mongoose        = require("mongoose");
+var bodyParser      = require("body-parser");
+mongoose.set('useUnifiedTopology', true); //removing deprication errors
+mongoose.connect("mongodb://localhost/yelp_camp" ,{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine","ejs");
+
+
+//Schema setup
+var campgroundSchema = new mongoose.Schema({
+    name: String,
+    image: String
+});
+
+var campground = mongoose.model("campground", campgroundSchema);
+
+campground.create({
+    name:"Murgi Vhandar",
+    image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+}, function(err, campground){
+    if(err){
+        console.log("There is an error in adding new campground");
+    }else{
+        console.log("New campground added: ");
+        console.log(campground);
+    }
+})
 
 var campgrounds = [
     {
