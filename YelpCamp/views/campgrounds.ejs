@@ -1,14 +1,41 @@
 <%- include("partials/header") %>
-<h1>The campground page</h1>
-<a href="/campgrounds/new">Add new campground</a>
-<% campgrounds.forEach(function(camp){ %>
-    <div>
-        <h4>
-            <%= camp.name %>
-        </h4>
-        <img class="img-fluid w-50" src="<%= camp.image %>" alt="">
-    </div>
 
-    
-<% }) %>
+
+<section id="header">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">The campground page</h1>
+          <p class="lead">
+              View our handpicked campgrounds from all over the world.
+          </p>
+          <p>
+            <a class="btn btn-outline-info" href="/campgrounds/new">Add new campground</a>
+          </p>
+        </div>
+      </div>
+</section>
+
+
+<section id="camps">
+    <div class="container">
+        
+        <div class="row justify-content-center">
+            <% campgrounds.forEach(function(camp){ %>
+            <div class="col-md-6 col-lg-4 pb-5">
+                <div class="card">
+                    <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= camp.name %></h5>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                  </div>
+            </div>
+            <% }) %>
+        </div>
+            
+    </div>
+</section>
+ 
+
 <%- include("partials/footer") %>
