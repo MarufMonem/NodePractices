@@ -16,63 +16,34 @@ var campgroundSchema = new mongoose.Schema({
 
 var campground = mongoose.model("campground", campgroundSchema);
 
-campground.create({
-    name:"Murgi Vhandar",
-    image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-}, function(err, campground){
-    if(err){
-        console.log("There is an error in adding new campground");
-    }else{
-        console.log("New campground added: ");
-        console.log(campground);
-    }
-})
+//Creating and adding campgrounds to the DB
+// campground.create({
+//     name:"Morog Pahar",
+//     image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
+// }, function(err, campground){
+//     if(err){
+//         console.log("There is an error in adding new campground");
+//     }else{
+//         console.log("New campground added: ");
+//         console.log(campground);
+//     }
+// })
 
-var campgrounds = [
-    {
-        name:"Murgi Vhandar",
-        image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-    },
-    {
-        name:"Morog Pahar",
-        image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    },
-    {
-        name:"khamar Bari",
-        image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    },
-    {
-        name:"Murgi Vhandar",
-        image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-    },
-    {
-        name:"Morog Pahar",
-        image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    },
-    {
-        name:"khamar Bari",
-        image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    },
-    {
-        name:"Murgi Vhandar",
-        image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-    },
-    {
-        name:"Morog Pahar",
-        image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    },
-    {
-        name:"khamar Bari",
-        image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-    }
-]
+
 //root path
 app.get("/", function(req,res){
     res.render("landing");
 });
 //all campgrounds
 app.get("/campgrounds", function(req,res){
-    res.render("campgrounds",{campgrounds:campgrounds});
+    //get all campgrounds
+    campground.find({},function(err, allCampground){
+        if(err){
+            console.log(err);
+        }else{
+            res.render("campgrounds",{campgrounds:allCampground});
+        }
+    })
 });
 
 //POST route for creating new camp grounds(restful routing)
@@ -85,9 +56,17 @@ app.post("/campgrounds", function(req,res){
         name:name,
         image:url
     }
-    campgrounds.push(newCampground);
-    //redirect back to /campgrounds
-    res.redirect("/campgrounds");
+
+    //create new campground and save
+    campground.create(newCampground,function(err,newlyCreated){
+        if(err){
+            console.log(err);
+        }else{
+            //redirect back to /campgrounds
+            res.redirect("/campgrounds");
+        }
+    })
+
 });
 
 //creating new campgrounds form page
