@@ -11,15 +11,17 @@ app.set("view engine","ejs");
 //Schema setup
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
 var campground = mongoose.model("campground", campgroundSchema);
 
 //Creating and adding campgrounds to the DB
 // campground.create({
-//     name:"Morog Pahar",
-//     image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
+//     name:"Grnaite Hill",
+//     image: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+//     description: "A walk along the granaite hill. See your dreams come to life!"
 // }, function(err, campground){
 //     if(err){
 //         console.log("There is an error in adding new campground");
@@ -27,34 +29,38 @@ var campground = mongoose.model("campground", campgroundSchema);
 //         console.log("New campground added: ");
 //         console.log(campground);
 //     }
-// })
+// });
 
 
 //root path
 app.get("/", function(req,res){
     res.render("landing");
 });
-//all campgrounds
+
+//all campgrounds (INDEX)
 app.get("/campgrounds", function(req,res){
     //get all campgrounds
     campground.find({},function(err, allCampground){
         if(err){
             console.log(err);
         }else{
-            res.render("campgrounds",{campgrounds:allCampground});
+            res.render("index",{campgrounds:allCampground});
         }
     })
 });
 
-//POST route for creating new camp grounds(restful routing)
+//POST route for creating new camp grounds(restful routing CREATE)
 app.post("/campgrounds", function(req,res){
 
     //get data from form and add to campground array
+    //here we are not using params because the data is not coming from the URL
     var name = req.body.name;
     var url = req.body.imgUrl;
+    var description = req.body.description; 
     var newCampground = {
         name:name,
-        image:url
+        image:url,
+        description: description
     }
 
     //create new campground and save
@@ -69,10 +75,28 @@ app.post("/campgrounds", function(req,res){
 
 });
 
-//creating new campgrounds form page
+//creating new campgrounds form page (NEW)
 app.get("/campgrounds/new", function(req,res){
     res.render("new");
 });
+
+// Path for particular campground (SHOW)
+//REMEMBER anything that has : should be at the end
+app.get("/campgrounds/:id", function(req, res){
+
+    campground.findById(req.params.id, function(err, foundCamp){
+        console.log("**************************************");
+        console.log("THE GIVEN ID IS: " + req.params.id);
+        console.log("**************************************");
+        if(err){
+            console.log(err);
+        }else{
+            res.render("show", {campground:foundCamp});
+        }
+    });
+
+    
+})
 
 
 

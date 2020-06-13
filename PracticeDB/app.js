@@ -43,7 +43,7 @@ cat.create({
     
 cat.find({}, function(err, cats){
     if(err){
-        console.log("VHUL SHOB VHUL");
+        console.log("WRONG");
     }else{
         console.log("THE CATS");
         console.log(cats);
