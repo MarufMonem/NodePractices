@@ -4,6 +4,16 @@ i{
 }
 
 .main{
-    margin-top: 90px;
-    padding-top: 50px;;
+    margin-top: 40px;
+    padding-top: 30px;;
+}
+
+#desc{
+    padding-top: 10px;;
+}
+#content{
+    border-left: 2px solid rgb(207, 205, 205);
+    border-right: 2px solid rgb(207, 205, 205);
+    padding-left: 15px;
+    padding-right: 15px;
 }

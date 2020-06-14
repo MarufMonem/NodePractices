@@ -42,12 +42,12 @@ app.get("/", function(req,res){
 });
 
 app.get("/blogs", function(req,res){
-    blog.find({}, function(err,foundBlog){
+    blog.find({}, function(err,foundBlogs){
         if(err){
             console.log("There was an error in retriving");
             console.log(err);
         }else{
-            res.render("index",{blogs:foundBlog});
+            res.render("index",{blogs:foundBlogs});
         }
     });
 });
@@ -59,7 +59,7 @@ app.get("/blogs/new", function(req,res){
 
 //CREATE route
 app.post("/blogs", function(req,res){
-    blog.create(req.body.blog, function(err,blog){
+    blog.create(req.body.blog, function(err,createdBlog){
         //takes the blog object data and sends that
         if(err){
             res.redirect("/new");
@@ -69,6 +69,46 @@ app.post("/blogs", function(req,res){
         
     });
 });
+
+//SHOW route
+app.get("/blogs/:id", function(req,res){
+    blog.findById(req.params.id, function(err,foundBlog){
+        //takes the blog object data and sends that
+        if(err){
+            console.log("*****************************************");
+            console.log("There was an error");
+            console.log("*****************************************");
+            res.redirect("/blogs");
+        }else{
+            console.log("*****************************************");
+            console.log("Found Blog: " + foundBlog);
+            console.log("*****************************************");
+            res.render("show", {blog:foundBlog});
+        }
+        
+    });
+});
+
+
+//EDIT route
+app.get("/blogs/:id/edit", function(req,res){
+    blog.findById(req.params.id, function(err,foundBlog){
+        //takes the blog object data and sends that
+        if(err){
+            console.log("*****************************************");
+            console.log("There was an error");
+            console.log("*****************************************");
+            res.redirect("/blogs");
+        }else{
+            console.log("*****************************************");
+            console.log("Found Blog: " + foundBlog);
+            console.log("*****************************************");
+            res.render("show", {blog:foundBlog});
+        }
+        
+    });
+});
+
 
 //Conneting to server
 app.listen(5500,"127.0.0.1",function(){
