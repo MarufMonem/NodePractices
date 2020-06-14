@@ -6,10 +6,15 @@
             <%=blog.title%>
         </div>
         <p><%=blog.created.toDateString()%></p>
-        <img class="ui centered large rounded image" src="<%= blog.image %>" alt="">
+        <img class="ui centered fluid rounded image" src="<%= blog.image %>" alt="">
         <div class="ui description">
             <p id="desc"> <%- blog.body %></p>
         </div>
+        <a href="/blogs/<%=blog._id%>/edit" class="ui basic yellow button"> Edit</a>
+
+        <form action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" class="ui form" id="delete">
+            <button class="ui red basic button">Delete</button>
+        </form>
 
     </div>
 </div>

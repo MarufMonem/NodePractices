@@ -11,9 +11,18 @@ i{
 #desc{
     padding-top: 10px;;
 }
+#blogsSection{
+    padding-top: 20px;;
+}
 #content{
     border-left: 2px solid rgb(207, 205, 205);
     border-right: 2px solid rgb(207, 205, 205);
     padding-left: 15px;
     padding-right: 15px;
+}
+#delete{
+    display: inline;
+}
+#blogDesc{
+    padding-top: 10px;;
 }

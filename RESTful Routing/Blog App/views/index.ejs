@@ -1,18 +1,21 @@
 <%- include("partials/header") %>
-<div>
-    <h1>Index page</h1>
 
-    <div class="ui container">
+<div class="ui main container">
+    <div class="ui huge centered header">
+        RESTful Blogs
+    </div>
+    <div id="blogsSection" class="ui divider">
         <% blogs.forEach(function(blog){ %>
-            <h1><%=blog.title%></h1>
-            <p><%=blog.created%></p>
-            <img class="ui image rounded large" src="<%= blog.image %>" alt="">
-            <p> <%-blog.body.substring(0,100) %></p>
-            <a href="/blogs/<%=blog._id %>">Read More</a>
+        <h1 class="ui header"><%=blog.title%></h1>
+        <h2 class="ui sub header"><%=blog.created.toDateString() %></h2>
+        <img class="ui image huge bordered rounded centered" src="<%= blog.image %>">
+        <div id="blogDesc" class="content">
+            <p><%-blog.body.substring(0,300) %> ...</p>
+        </div>
+        <a class="ui basic button " href="/blogs/<%=blog._id %>">Read More</a>
         <% }) %>
     </div>
-
-
+    
 </div>
 
 <%- include("partials/footer") %>
