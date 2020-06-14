@@ -3,9 +3,71 @@ var bodyParser      = require("body-parser");
 var mongoose        = require("mongoose");
 var app             = express();
 
+app.set("view engine","ejs");
+//custom style sheet location
+app.use(express.static("public"));
+//using body parser
+app.use(bodyParser.urlencoded({extended:true}));
+//connecting to mongoDB
 mongoose.connect("mongodb://localhost/restful_blog_app");
+
+//Schema
+var blogSchema = new mongoose.Schema({
+    title   :String,
+    image   :String,
+    body    :String,
+    created :{type: Date, default: Date.now}
+});
+//Mongoose Model
+var blog = mongoose.model("blog", blogSchema); 
+
+//Test data
+// blog.create({
+//     title: "Learning node!! :o",
+//     image: "https://images.unsplash.com/photo-1505238680356-667803448bb6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+//     body:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+//     //leaving created blank.
+// },function(err, blog){
+//     if(err){
+//         console.log("ERR Found: " + err);
+//     }else{
+//         console.log(blog);
+//     }
+// });
+
+//RESTful Routes
+
 app.get("/", function(req,res){
-    res.send("Welcome to my assignment");
+    res.redirect("/blogs");
+});
+
+app.get("/blogs", function(req,res){
+    blog.find({}, function(err,foundBlog){
+        if(err){
+            console.log("There was an error in retriving");
+            console.log(err);
+        }else{
+            res.render("index",{blogs:foundBlog});
+        }
+    });
+});
+
+//NEW route
+app.get("/blogs/new", function(req,res){
+    res.render("new");
+});
+
+//CREATE route
+app.post("/blogs", function(req,res){
+    blog.create(req.body.blog, function(err,blog){
+        //takes the blog object data and sends that
+        if(err){
+            res.redirect("/new");
+        }else{
+            res.redirect("/blogs");
+        }
+        
+    });
 });
 
 //Conneting to server
