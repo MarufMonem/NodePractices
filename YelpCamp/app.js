@@ -9,8 +9,9 @@ mongoose.set('useUnifiedTopology', true); //removing deprication errors
 mongoose.connect("mongodb://localhost/yelp_camp" ,{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine","ejs");
+app.use(express.static(__dirname + "/public"))
 
-seedDB();
+// seedDB();
 //root path
 app.get("/", function(req,res){
     res.render("landing");
@@ -23,7 +24,7 @@ app.get("/campgrounds", function(req,res){
         if(err){
             console.log(err);
         }else{
-            res.render("index",{campgrounds:allCampground});
+            res.render("campgrounds/index",{campgrounds:allCampground});
         }
     })
 });
@@ -56,26 +57,70 @@ app.post("/campgrounds", function(req,res){
 
 //creating new campgrounds form page (NEW)
 app.get("/campgrounds/new", function(req,res){
-    res.render("new");
+    res.render("campgrounds/new");
 });
 
 // Path for particular campground (SHOW)
 //REMEMBER anything that has : should be at the end
 app.get("/campgrounds/:id", function(req, res){
 
-    campground.findById(req.params.id, function(err, foundCamp){
+    campground.findById(req.params.id).populate("comments").exec(function(err, foundCamp){
         console.log("**************************************");
-        console.log("THE GIVEN ID IS: " + req.params.id);
+        console.log("THE FOUND CAMP: " + foundCamp);
+        console.log("======================================");
+        console.log("THE FOUND CAMP COMMENTS: " + foundCamp.comments);
         console.log("**************************************");
         if(err){
             console.log(err);
         }else{
-            res.render("show", {campground:foundCamp});
+            res.render("campgrounds/show", {campground:foundCamp});
         }
     });
 
     
-})
+});
+
+//Comment Routes
+
+//Comments Form
+app.get("/campgrounds/:id/comments/new",function(req,res){
+    campground.findById(req.params.id,function(err,foundCamp){
+        res.render("comments/new",{camp:foundCamp});
+    });
+
+});
+
+//Comments Form
+app.post("/campgrounds/:id/comments",function(req,res){
+    campground.findById(req.params.id,function(err,foundCamp){
+        console.log("***************comments***********************");
+        console.log("THE FOUND CAMP: " + foundCamp);
+        console.log("===============comments=======================");
+        if(err){
+            console.log("ERROR :" + err);
+            res.redirect("/campgrounds/"+ req.params.id);
+        }else{
+            comment.create(req.body.comment, function(err, newComment){
+                if(err){
+                    console.log(err);
+                }else{
+                    foundCamp.comments.push(newComment);
+                    foundCamp.save(function(err, savedCampground){
+                        if(err){
+                            console.log("Couldnt add the comment");
+                        }else{
+                            res.redirect("/campgrounds/"+ req.params.id);
+                        }
+                    });
+                }
+            });
+        }
+
+    });
+
+});
+    
+    
 
 
 
