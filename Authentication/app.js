@@ -25,6 +25,9 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//this line is telling passport to use the user authenticate method
+//which is given to the userSchema
+passport.use(new localStrategy(user.authenticate()))
 //These 2 lines are responsible for reading the session, taking the
 //date from the session encode and decoding it
 //this is able to do this becuase we included passport methods in
@@ -41,7 +44,7 @@ app.get("/", function(req, res){
     res.render("home");
 });
 
-app.get("/secret", function(req, res){
+app.get("/secret", isloggedIn, function(req, res){
     res.render("secret");
 });
 
@@ -78,9 +81,27 @@ app.get("/login", function(req, res){
 });
 
 //Create
-app.post("/login", function(req, res){
-    res.render("login");
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/secret", //if the login was successful
+    failureRedirect: "/login" // if it wasnt
+}) , function(req, res){
+    
 });
+
+//logging out handler
+app.get("/logout", function(req, res){
+    req.logOut();
+    res.redirect("/");
+});
+
+//logged in checker
+
+function isloggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/");
+}
 
 //connection
 app.listen(5500,"127.0.0.1", function(){
