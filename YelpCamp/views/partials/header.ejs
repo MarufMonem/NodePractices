@@ -37,15 +37,25 @@
               </ul>
     
               <ul class="navbar-nav">
+
+                <% if(!currentUser){ %>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">login</a>
+                    <a class="nav-link" href="/login">login</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
+                    <a class="nav-link" href="/register">Sign Up</a>
                   </li>
+                <% }else{ %>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Log out</a>
+                      <a class="nav-link" href="/logout"> <strong> <%= currentUser.username.toUpperCase() %> </strong></a>
                   </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="/logout">Log out</a>
+                  </li>
+                <% } %>
+                  
+                  
               </ul>
             </div>
           </nav>
