@@ -60,6 +60,9 @@ function seedDB(){
         // });
     }); 
     //add a few comments
+
+    comments.remove();
+    users.remove();
 }
  
 module.exports = seedDB;
