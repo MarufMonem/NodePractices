@@ -12,7 +12,7 @@ router.get("/register", function(req, res){
 });
 
 //CREATE
-router.post("/register", isloggedIn, function(req, res){
+router.post("/register", function(req, res){
     user.register(new user({username: req.body.username}), req.body.password, function(err, newUser){
         if(err){
             console.log("There is an error: " + err );
@@ -22,6 +22,7 @@ router.post("/register", isloggedIn, function(req, res){
             //This logs the user in handles everything related to the session
             //then run the serialize user method
             //then specifying that we would use local strategy
+            console.log("Successful: " );
             passport.authenticate("local")(req,res, function(){
                 res.redirect("/campgrounds");
             });
@@ -40,6 +41,7 @@ router.get("/login", function(req, res){
 //passport authenticate middleware
 router.post("/login", passport.authenticate("local", {
     successRedirect: "/campgrounds", //if the login was successful
+    failureMessage: "Wrong password",
     failureRedirect: "/login" // if it wasnt
 }) , function(req, res){
     
