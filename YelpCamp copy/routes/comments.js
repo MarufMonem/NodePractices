@@ -12,8 +12,8 @@ router.get("/new",isloggedIn,function(req,res){
 
 });
 
-//Comments Form
-router.post("/",function(req,res){
+//Comments create logic handler
+router.post("/",isloggedIn,function(req,res){
     campground.findById(req.params.id,function(err,foundCamp){
         console.log("***************comments***********************");
         console.log("THE FOUND CAMP: " + foundCamp);
@@ -26,6 +26,9 @@ router.post("/",function(req,res){
                 if(err){
                     console.log(err);
                 }else{
+                    newComment.author.id = req.user._id;
+                    newComment.author.username = req.user.username;
+                    newComment.save();
                     foundCamp.comments.push(newComment);
                     foundCamp.save(function(err, savedCampground){
                         if(err){
