@@ -21,6 +21,6 @@ let url = "http://www.omdbapi.com/?s=" + movieName + "&apikey=thewdb";
     });
 
 })
-app.listen(5500,"127.0.0.1",function(){
+app.listen(process.env.PORT,process.env.IP,function(){
     console.log("App Started");
 });
